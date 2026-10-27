@@ -3,43 +3,1249 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI Creative Agent</title>
+  <title>AI Creative Agent Team — 한 줄의 아이디어로 완성하는 다섯 가지 결과물</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap">
+
+  <style>
+    /* 디자인 시스템 및 공통 변수 */
+    :root {
+      --bg: #F7F7FB;
+      --text: #14142B;
+      --sub: #6B6B80;
+      --line: rgba(20,20,43,.08);
+      --brand-grad: linear-gradient(120deg, #6E8BFF, #A77BFF 40%, #FF8AC8 70%, #FFB37A);
+      --brand-grad-text: linear-gradient(120deg, #4F6BFF, #8B5CF6 40%, #EC4899 70%, #FF7A45);
+      --ease-spring: cubic-bezier(.2,1.3,.3,1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Pretendard Variable', -apple-system, sans-serif;
+      overflow-x: hidden;
+      word-break: keep-all;
+      position: relative;
+    }
+
+    /* 아주 옅은 노이즈 그레인 질감 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: .04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* 히어로 및 CTA 메시 그라데이션 패널 */
+    .mesh {
+      background: radial-gradient(circle at 16% 18%, #8EA2FF 0 14%, transparent 32%), 
+                  radial-gradient(circle at 78% 9%, #FFB3D9 0 13%, transparent 30%), 
+                  radial-gradient(circle at 66% 62%, #FFD3A8 0 16%, transparent 34%), 
+                  radial-gradient(circle at 25% 74%, #9BE3FF 0 15%, transparent 32%), 
+                  radial-gradient(circle at 50% 32%, #C4A5FF 0 16%, transparent 36%), 
+                  linear-gradient(135deg, #fff, #F5F0FF 40%, #FFF7F0);
+    }
+
+    /* 1. 고정 내비게이션 바 */
+    .nav-bar {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(1080px, calc(100% - 24px));
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 1000;
+      background: rgba(255,255,255,.65);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 999px;
+      box-shadow: 0 20px 40px -15px rgba(76,70,160,.15), inset 0 1px 1px #fff;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--brand-grad);
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px;
+      color: var(--sub);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color .2s;
+      white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--text);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform .2s var(--ease-spring), opacity .2s;
+    }
+    .nav-cta:hover { transform: scale(1.03); opacity: .9; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+    }
+
+    /* 섹션 제목 및 공통 레이아웃 */
+    section {
+      scroll-margin-top: 96px;
+    }
+    .sec-title-wrap {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .sec-tag {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 28px;
+      color: #7C3AED;
+      margin-bottom: 6px;
+      letter-spacing: .02em;
+    }
+    .sec-heading {
+      font-size: clamp(32px, 4.2vw, 56px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      color: var(--text);
+    }
+
+    /* 2. 히어로 섹션 */
+    .hero {
+      margin: 12px;
+      border-radius: 36px;
+      padding: 100px 20px 60px 20px;
+      min-height: calc(100vh - 24px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-content {
+      width: min(860px, 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.8);
+      font-size: 13px;
+      font-weight: 600;
+      color: #4F46E5;
+      margin-bottom: 16px;
+      white-space: nowrap;
+    }
+    .hero-badge span.serif {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-weight: normal;
+      font-size: 16px;
+      color: var(--sub);
+      margin-left: 4px;
+      padding-left: 8px;
+      border-left: 1px solid rgba(20,20,43,.15);
+    }
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 88px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      text-wrap: balance;
+    }
+    .hero h1 span {
+      background: var(--brand-grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: clamp(16px, 1.8vw, 19px);
+      color: var(--sub);
+      max-width: 620px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .hero-logos {
+      margin-top: 48px;
+      font-size: 12.5px;
+      color: var(--sub);
+      font-weight: 500;
+      letter-spacing: .02em;
+      opacity: .8;
+      text-align: center;
+      white-space: nowrap;
+      overflow-x: auto;
+      width: 100%;
+      padding-bottom: 8px;
+    }
+
+    /* 대화창 카드 컴포넌트 */
+    .chat-card {
+      width: min(860px, 100%);
+      background: rgba(255,255,255,.55);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 28px;
+      box-shadow: 0 30px 80px -30px rgba(76,70,160,.25), inset 0 1px 1px #fff;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: height .5s var(--ease-spring);
+    }
+    .chat-card > * { flex: none; }
+    .chat-card > #webchat { height: 200px; min-height: 0; }
+    body.is-started .chat-card { height: calc(100svh - 112px); }
+    body.is-started .chat-card > #webchat { flex: 1 1 0; height: auto; min-height: 0; }
+
+    /* 창 막대 */
+    .chat-bar {
+      height: 48px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(20,20,43,.06);
+    }
+    .chat-dots { display: flex; gap: 6px; }
+    .chat-dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(20,20,43,.12); }
+    .chat-title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .connection-dot { width: 8px; height: 8px; border-radius: 50%; background: #CBD5E1; transition: background .3s; }
+    body.is-connected .connection-dot { background: #10B981; box-shadow: 0 0 8px rgba(16,185,129,.4); }
+    .chat-reset-btn {
+      background: rgba(255,255,255,.8);
+      border: 1px solid rgba(20,20,43,.08);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--sub);
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .chat-reset-btn:hover { background: #fff; color: var(--text); }
+
+    /* 채팅 하단부 컨트롤 */
+    .chat-foot {
+      padding: 16px 20px 20px 20px;
+      background: rgba(255,255,255,.3);
+      border-top: 1px solid rgba(20,20,43,.06);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .example-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      white-space: nowrap;
+      padding-bottom: 2px;
+    }
+    .example-chips::-webkit-scrollbar { display: none; }
+    .chip {
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(20,20,43,.08);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      color: var(--text);
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .chip:hover { background: #fff; border-color: rgba(79,70,229,.3); transform: translateY(-1px); }
+
+    /* 입력창 컴포저 */
+    .composer {
+      position: relative;
+      background: #fff;
+      border-radius: 28px;
+      padding: 8px 8px 8px 20px;
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(20,20,43,.1);
+      box-shadow: 0 10px 30px -10px rgba(76,70,160,.1);
+      transition: all .3s var(--ease-spring);
+    }
+    .composer:focus-within {
+      border-color: #6366F1;
+      box-shadow: 0 15px 35px -10px rgba(99,102,241,.25);
+      transform: translateY(-2px);
+    }
+    .composer textarea {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font: inherit;
+      font-size: 15px;
+      color: var(--text);
+      resize: none;
+      max-height: 140px;
+      line-height: 1.5;
+      padding: 8px 0;
+    }
+    .composer textarea::placeholder { color: #9CA3AF; }
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--text);
+      color: #fff;
+      border: none;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: transform .2s var(--ease-spring), opacity .2s;
+      flex: none;
+    }
+    .send-btn:hover { transform: scale(1.05); }
+    .send-btn:disabled { opacity: .3; cursor: not-allowed; transform: none; }
+
+    .working-status {
+      font-size: 12px;
+      color: #6366F1;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 6px;
+    }
+    body.is-working .working-status { display: flex; }
+    .working-dots span {
+      display: inline-block;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #6366F1;
+      animation: pulse-dot 1.2s infinite ease-in-out both;
+    }
+    .working-dots span:nth-child(2) { animation-delay: .2s; }
+    .working-dots span:nth-child(3) { animation-delay: .4s; }
+    @keyframes pulse-dot { 0%, 80%, 100% { transform: scale(0); opacity: .4; } 40% { transform: scale(1); opacity: 1; } }
+
+    .chat-disclaimer {
+      font-size: 11px;
+      color: #9CA3AF;
+      text-align: center;
+      margin-top: -4px;
+    }
+
+    /* 오로라 테두리 애니메이션 (작업 중일 때 활성화) */
+    @property --aurora { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+    .composer::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      padding: 1.5px;
+      border-radius: inherit;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .6s;
+      background: conic-gradient(from var(--aurora), #a5b4fc, #f0abfc, #fda4af, #fcd34d, #86efac, #67e8f9, #a5b4fc);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: aurora 6s linear infinite;
+    }
+    body.is-working .composer::before { opacity: .8; }
+    @keyframes aurora { to { --aurora: 360deg; } }
+
+    /* 3. 숫자 띠 섹션 */
+    .stats-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+    .stat-card {
+      background: rgba(255,255,255,.6);
+      border: 1px solid rgba(255,255,255,.8);
+      backdrop-filter: blur(16px);
+      padding: 32px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 20px 40px -20px rgba(76,70,160,.1);
+    }
+    .stat-num {
+      font-size: 48px;
+      font-weight: 800;
+      background: var(--brand-grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: var(--sub);
+      font-weight: 600;
+    }
+
+    /* 4. 기능 소개 (#features) - 벤토 그리드 */
+    .features-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 24px;
+    }
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 20px;
+    }
+    .bento-card {
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(255,255,255,.9);
+      backdrop-filter: blur(24px);
+      border-radius: 28px;
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      box-shadow: 0 20px 50px -20px rgba(76,70,160,.12);
+      transition: transform .3s var(--ease-spring), box-shadow .3s;
+    }
+    .bento-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 30px 60px -20px rgba(76,70,160,.2);
+    }
+    .bento-card.span-3 { grid-column: span 3; }
+    .bento-card.span-2 { grid-column: span 2; }
+    @media (max-width: 900px) {
+      .bento-card.span-3, .bento-card.span-2 { grid-column: span 6; }
+    }
+    .bento-tag {
+      font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: #6366F1;
+      margin-bottom: 12px;
+      letter-spacing: .04em;
+    }
+    .bento-card h3 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+    .bento-card p {
+      font-size: 15px;
+      color: var(--sub);
+      line-height: 1.5;
+    }
+    .bento-mockup {
+      margin-top: 24px;
+      height: 160px;
+      border-radius: 16px;
+      background: rgba(240,242,255,.5);
+      border: 1px solid rgba(20,20,43,.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* 목업 내부 스타일링 */
+    .mockup-slides {
+      display: flex;
+      gap: 8px;
+      transition: transform .4s var(--ease-spring);
+    }
+    .bento-card:hover .mockup-slides { transform: scale(1.05); }
+    .mockup-slide-item {
+      width: 72px; height: 100px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0,0,0,.08);
+      padding: 8px;
+      font-size: 9px;
+      color: var(--sub);
+      border: 1px solid rgba(0,0,0,.04);
+    }
+    .mockup-slide-item:nth-child(2) { transform: translateY(-8px) rotate(3deg); background: #FAF5FF; }
+    .mockup-slide-item:nth-child(3) { transform: translateY(-16px) rotate(6deg); background: #F0FDF4; }
+
+    .mockup-poster {
+      width: 80px; height: 120px;
+      background: linear-gradient(135deg, #EC4899, #8B5CF6);
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(236,72,153,.3);
+      padding: 10px;
+      color: #fff;
+      font-family: 'Instrument Serif', serif;
+      font-size: 14px;
+      line-height: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .mockup-doc {
+      width: 110px; height: 130px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.08);
+      padding: 12px;
+      border-top: 6px solid #6366F1;
+    }
+    .mockup-doc-line { height: 6px; background: #F3F4F6; border-radius: 3px; margin-bottom: 6px; width: 100%; }
+    .mockup-doc-line:nth-child(2) { width: 80%; }
+    .mockup-doc-line:nth-child(3) { width: 60%; }
+
+    .mockup-browser {
+      width: 160px; height: 110px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.1);
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    .mockup-browser-bar {
+      height: 20px; background: #F9FAFB; border-bottom: 1px solid #F3F4F6; display: flex; align-items: center; padding: 0 8px; gap: 4px;
+    }
+    .mockup-browser-dot { width: 6px; height: 6px; border-radius: 50%; background: #E5E7EB; }
+
+    .mockup-budget {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+    .mockup-budget-val {
+      font-size: 16px;
+      font-weight: 800;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: #10B981;
+    }
+    .mockup-bars { display: flex; align-items: flex-end; gap: 6px; height: 50px; }
+    .mockup-bar { width: 14px; background: #6366F1; border-radius: 4px 4px 0 0; height: var(--h); transition: height 1s; }
+
+    /* 5. 작동 방식 (#how) */
+    .how-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      .how-section { grid-template-columns: 1fr; }
+    }
+    .orbit-container {
+      background: rgba(255,255,255,.6);
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 36px;
+      overflow: hidden;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 30px 60px -20px rgba(76,70,160,.15);
+    }
+    /* 작동 방식 궤도 CSS (제공된 코드 그대로) */
+    .orbit { --r: 150px; position: relative; width: calc(var(--r) * 2); aspect-ratio: 1; margin: 48px auto; }
+    .orbit-ring { position: absolute; inset: 0; border-radius: 50%; border: 1px dashed rgba(20,20,43,.16); animation: orbit-spin 40s linear infinite; }
+    .orbit .agent { position: absolute; left: 50%; top: 50%; transform: rotate(var(--a)) translateX(var(--r)) rotate(calc(-1 * var(--a))); }
+    .orbit .agent b { position: absolute; translate: -50% -50%; white-space: nowrap; padding: 8px 12px; border-radius: 999px; font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; color: #5B4BC4; background: rgba(255,255,255,.8); border: 1px solid #fff; animation: orbit-spin 40s linear infinite reverse; box-shadow: 0 10px 20px rgba(0,0,0,.05); }
+    .orbit .leader { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 112px; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--text); color: #fff; box-shadow: 0 15px 30px rgba(20,20,43,.3); }
+    @keyframes orbit-spin { to { rotate: 360deg; } }
+    @media (max-width: 600px) { .orbit { --r: 100px; } .orbit .agent b { font-size: 10px; padding: 6px 9px; } .orbit .leader { width: 84px; } }
+
+    .how-steps { display: flex; flex-direction: column; gap: 24px; }
+    .how-step-item {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      background: rgba(255,255,255,.5);
+      border: 1px solid rgba(255,255,255,.8);
+      padding: 24px;
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+    }
+    .how-step-num {
+      width: 36px; height: 36px; border-radius: 50%; background: #EEF2FF; color: #6366F1; font-weight: 800; display: grid; place-items: center; flex: none; font-size: 14px;
+    }
+    .how-step-content h4 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .how-step-content p { font-size: 14.5px; color: var(--sub); line-height: 1.5; }
+
+    /* 6. 디자인 시스템 섹션 (#design) */
+    .design-section {
+      background: linear-gradient(135deg, #5B3DF5, #FF4FA3 50%, #FF9F45);
+      color: #fff;
+      padding: 120px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .design-section .sec-tag { color: rgba(255,255,255,.8); }
+    .design-section .sec-heading { color: #fff; }
+    .design-sub { text-align: center; font-size: 18px; color: rgba(255,255,255,.9); margin-bottom: 60px; }
+    .themes-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .theme-card {
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 24px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: transform .3s var(--ease-spring);
+    }
+    .theme-card:hover { transform: translateY(-4px); background: rgba(255,255,255,.22); }
+    .theme-colors { display: flex; gap: 8px; }
+    .theme-dot { width: 24px; height: 24px; border-radius: 50%; border: 1px solid rgba(255,255,255,.4); }
+    .theme-name { font-size: 18px; font-weight: 700; }
+    .theme-use { font-size: 13.5px; color: rgba(255,255,255,.8); line-height: 1.4; }
+
+    /* 7. 마키 (추천 프롬프트) 섹션 */
+    .prompts-section {
+      padding: 100px 0;
+      overflow: hidden;
+    }
+    .marquee-wrap {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+      animation: marquee 35s linear infinite;
+      margin-bottom: 16px;
+    }
+    .marquee-wrap.reverse { animation-direction: reverse; }
+    .marquee-chip {
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(255,255,255,.9);
+      backdrop-filter: blur(12px);
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 10px 30px rgba(0,0,0,.03);
+      transition: all .2s;
+    }
+    .marquee-chip:hover { background: var(--text); color: #fff; transform: scale(1.03); }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+
+    /* 8. 마지막 CTA 섹션 */
+    .cta-section {
+      margin: 12px;
+      border-radius: 36px;
+      padding: 120px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+    .cta-heading {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      max-width: 800px;
+    }
+    .cta-btn {
+      background: var(--text);
+      color: #fff;
+      padding: 18px 36px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 20px 40px rgba(20,20,43,.25);
+      transition: transform .2s var(--ease-spring), opacity .2s;
+    }
+    .cta-btn:hover { transform: scale(1.05); opacity: .95; }
+
+    /* 9. 푸터 */
+    footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13.5px;
+      color: var(--sub);
+      border-top: 1px solid rgba(20,20,43,.06);
+    }
+    @media (max-width: 600px) {
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+    }
+
+    /* 10. 떠 있는 알림 위젯 */
+    .floating-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid rgba(255,255,255,.9);
+      padding: 12px 20px;
+      border-radius: 999px;
+      box-shadow: 0 20px 40px rgba(76,70,160,.2);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform .4s var(--ease-spring), opacity .4s;
+    }
+    .floating-toast.is-visible { transform: translateY(0); opacity: 1; }
+    .toast-dot { width: 8px; height: 8px; border-radius: 50%; background: #6366F1; }
+
+    /* Web Chat 기본 요소 정리 + 첨부 파일 카드 (제공된 CSS 완벽 수용) */
+    #webchat .webchat__typing-indicator { display: none !important; }
+    #webchat .webchat__stacked-layout:not(.webchat__stacked-layout--from-user) .webchat__stacked-layout__status { display: none; }
+    #webchat .webchat__stacked-layout__attachment-row { margin-top: 8px !important; }
+    #webchat .webchat__stacked-layout__attachment, #webchat .webchat__stacked-layout__attachment .webchat__bubble__content { background: none !important; border: 0 !important; overflow: visible !important; }
+    #webchat .webchat__stacked-layout__content:has(.webchat__fileContent) { overflow: visible !important; }
+    #webchat .webchat__fileContent { padding: 0 !important; }
+    #webchat .webchat__fileContent__buttonLink { display: flex !important; align-items: center; gap: 12px; height: 56px; padding: 0 18px 0 12px; border-radius: 18px; text-decoration: none; color: #14142B; background: rgba(255,255,255,.72); -webkit-backdrop-filter: blur(24px) saturate(160%); backdrop-filter: blur(24px) saturate(160%); border: 1px solid rgba(255,255,255,.8); box-shadow: 0 10px 24px -16px rgba(76,70,160,.3), inset 0 1px 1px #fff; }
+    #webchat .webchat__fileContent__buttonLink::before { content: "FILE"; flex: none; padding: 5px 8px; border-radius: 999px; background: linear-gradient(120deg, #EEF0FF, #FBEFFF); color: #5B4BC4; font: 600 10.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .04em; }
+    #webchat a[download$=".pptx" i]::before { content: "PPTX"; } #webchat a[download$=".docx" i]::before { content: "DOCX"; } #webchat a[download$=".xlsx" i]::before { content: "XLSX"; } #webchat a[download$=".html" i]::before { content: "HTML"; }
+    #webchat .webchat__fileContent__badge { flex: 1; min-width: 0; background: none !important; padding: 0 !important; }
+    #webchat .webchat__fileContent__fileName { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace !important; color: #14142B !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #webchat .webchat__fileContent__downloadIcon { flex: none; box-sizing: content-box; width: 16px; height: 16px; padding: 0; fill: #6B6B80; color: #6B6B80; }
+    
+    /* 에이전트 답의 한글 줄바꿈과 마크다운 표 */
+    #webchat .webchat__render-markdown { word-break: keep-all; overflow-wrap: anywhere; }
+    #webchat .webchat__render-markdown table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; border-spacing: 0; margin: 12px 0; font-variant-numeric: tabular-nums; }
+    #webchat .webchat__render-markdown th, #webchat .webchat__render-markdown td { padding: 9px 18px 9px 0; border-bottom: 1px solid rgba(20,20,43,.08); white-space: nowrap; }
+    #webchat .webchat__render-markdown th { font-size: 12px; font-weight: 600; color: #6B6B80; }
+
+    /* 등장 효과 (IntersectionObserver용) */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .8s var(--ease-spring), transform .8s var(--ease-spring);
+    }
+    [data-reveal].is-revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
-  <p id="status" role="status" aria-live="polite">채팅에 연결하는 중입니다...</p>
-  <div id="webchat" style="height: 600px"></div>
+
+  <!-- 1. 내비게이션 바 -->
+  <nav class="nav-bar">
+    <a href="#" class="nav-brand">
+      <div class="nav-dot"></div>
+      AI Creative Agent Team
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">기능</a></li>
+      <li><a href="#how">작동 방식</a></li>
+      <li><a href="#design">디자인</a></li>
+    </ul>
+    <button class="nav-cta" onclick="scrollToChat()">지금 써 보기</button>
+  </nav>
+
+  <!-- 2. 히어로 섹션 -->
+  <header class="hero mesh">
+    <div class="hero-content">
+      <div class="hero-badge">
+        ● Copilot Studio 멀티 에이전트 <span class="serif">One idea, five deliverables.</span>
+      </div>
+      <h1>한 줄의 아이디어, <span>다섯 개의 결과물</span></h1>
+      <p>팀장 에이전트가 전문가 다섯에게 일을 나눠, 발표자료부터 예산 분석까지 한 번에 만들어 드려요.</p>
+
+      <!-- 대화창 카드 -->
+      <div class="chat-card">
+        <div class="chat-bar">
+          <div class="chat-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="chat-title-group">
+            <div class="connection-dot" id="conn-dot"></div>
+            <span id="conn-text">팀을 부르는 중…</span>
+          </div>
+          <button class="chat-reset-btn" onclick="location.reload()">새 대화</button>
+        </div>
+
+        <!-- Web Chat 영역 -->
+        <div id="webchat"></div>
+
+        <div class="chat-foot">
+          <div class="example-chips" id="example-chips">
+            <div class="chip" onclick="sendPrompt('가을 학교 축제 기획해 줘')">가을 학교 축제 기획해 줘</div>
+            <div class="chip" onclick="sendPrompt('탄소중립 캠페인 홍보물 만들어 줘')">탄소중립 캠페인 홍보물 만들어 줘</div>
+            <div class="chip" onclick="sendPrompt('교사 AI 연수 프로그램 제안해 줘')">교사 AI 연수 프로그램 제안해 줘</div>
+          </div>
+          <div class="working-status">
+            <div class="working-dots"><span></span><span></span><span></span></div>
+            <span id="working-timer">팀이 작업 중 · 0:00</span>
+          </div>
+          <div class="composer">
+            <textarea id="user-input" placeholder="무엇을 만들어 볼까요?" rows="1" onkeydown="handleKeydown(event)"></textarea>
+            <button class="send-btn" id="send-btn" onclick="submitMessage()" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+            </button>
+          </div>
+          <div class="chat-disclaimer">AI는 실수할 수 있어요. 중요한 내용은 확인하세요.</div>
+        </div>
+      </div>
+
+      <div class="hero-logos">
+        Microsoft Copilot Studio · Claude Opus 5.5 · PowerPoint · Word · Excel · HTML
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. 숫자 띠 섹션 -->
+  <section class="stats-section" data-reveal>
+    <div class="stat-card">
+      <div class="stat-num" data-target="1">0</div>
+      <div class="stat-label">번의 요청</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" data-target="6">0</div>
+      <div class="stat-label">명의 에이전트</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" data-target="7">0</div>
+      <div class="stat-label">개의 작업 매뉴얼</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" data-target="5">0</div>
+      <div class="stat-label">개의 파일</div>
+    </div>
+  </section>
+
+  <!-- 4. 기능 소개 (#features) -->
+  <section id="features" class="features-section">
+    <div class="sec-title-wrap" data-reveal>
+      <div class="sec-tag">Five deliverables.</div>
+      <h2 class="sec-heading">한 번의 요청으로 받는 다섯 가지</h2>
+    </div>
+    <div class="bento-grid">
+      <!-- 1번 카드 -->
+      <div class="bento-card span-3" data-reveal>
+        <div>
+          <div class="bento-tag">presentation.pptx</div>
+          <h3>발표 슬라이드</h3>
+          <p>말할 거리가 정리된 10장 내외 슬라이드와 발표자 노트까지 완벽하게.</p>
+        </div>
+        <div class="bento-mockup">
+          <div class="mockup-slides">
+            <div class="mockup-slide-item"><b>01</b><br>Overview</div>
+            <div class="mockup-slide-item"><b>02</b><br>Strategy</div>
+            <div class="mockup-slide-item"><b>03</b><br>Results</div>
+          </div>
+        </div>
+      </div>
+      <!-- 2번 카드 -->
+      <div class="bento-card span-3" data-reveal>
+        <div>
+          <div class="bento-tag">poster.html</div>
+          <h3>디지털 포스터</h3>
+          <p>걸어 두고 싶은 한 장. 브라우저에서 바로 여는 유리 질감 포스터, 인쇄·PDF 저장도 가능해요.</p>
+        </div>
+        <div class="bento-mockup">
+          <div class="mockup-poster">
+            <span style="font-size: 20px; font-weight: bold;">FESTIVAL</span>
+          </div>
+        </div>
+      </div>
+      <!-- 3번 카드 -->
+      <div class="bento-card span-2" data-reveal>
+        <div>
+          <div class="bento-tag">proposal.docx</div>
+          <h3>공식 제안서</h3>
+          <p>바로 보낼 수 있는 제안서. 테마 색 표지와 읽기 좋은 흰 본문 구성.</p>
+        </div>
+        <div class="bento-mockup">
+          <div class="mockup-doc">
+            <div class="mockup-doc-line"></div>
+            <div class="mockup-doc-line"></div>
+            <div class="mockup-doc-line"></div>
+          </div>
+        </div>
+      </div>
+      <!-- 4번 카드 -->
+      <div class="bento-card span-2" data-reveal>
+        <div>
+          <div class="bento-tag">webpage.html</div>
+          <h3>프로젝트 랜딩</h3>
+          <p>신청까지 받는 랜딩 페이지. 유리 메뉴 바와 카드로 구성된 소개 페이지.</p>
+        </div>
+        <div class="bento-mockup">
+          <div class="mockup-browser">
+            <div class="mockup-browser-bar">
+              <div class="mockup-browser-dot"></div>
+              <div class="mockup-browser-dot"></div>
+              <div class="mockup-browser-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 5번 카드 -->
+      <div class="bento-card span-2" data-reveal>
+        <div>
+          <div class="bento-tag">budget_analysis.xlsx</div>
+          <h3>예산 분석표</h3>
+          <p>숫자가 맞는 예산. 숫자 카드와 차트, 합계는 수식으로 정확하게 산출.</p>
+        </div>
+        <div class="bento-mockup">
+          <div class="mockup-budget">
+            <div class="mockup-budget-val">₩12,400,000</div>
+            <div class="mockup-bars">
+              <div class="mockup-bar" style="--h: 24px;"></div>
+              <div class="mockup-bar" style="--h: 40px;"></div>
+              <div class="mockup-bar" style="--h: 32px;"></div>
+              <div class="mockup-bar" style="--h: 48px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 작동 방식 (#how) -->
+  <section id="how" class="how-section">
+    <div class="orbit-container" data-reveal>
+      <div class="orbit">
+        <div class="orbit-ring">
+          <span class="agent" style="--a:0deg"><b>ppt-agent</b></span>
+          <span class="agent" style="--a:72deg"><b>poster-agent</b></span>
+          <span class="agent" style="--a:144deg"><b>proposal-agent</b></span>
+          <span class="agent" style="--a:216deg"><b>webpage-agent</b></span>
+          <span class="agent" style="--a:288deg"><b>budget-agent</b></span>
+        </div>
+        <div class="leader">팀장</div>
+      </div>
+    </div>
+    <div class="how-steps" data-reveal>
+      <div class="sec-tag">How the team works.</div>
+      <h2 class="sec-heading" style="margin-bottom: 24px;">팀장 하나, 전문가 다섯, 매뉴얼 일곱.</h2>
+      
+      <div class="how-step-item">
+        <div class="how-step-num">1</div>
+        <div class="how-step-content">
+          <h4>브리프 작성</h4>
+          <p>요청을 한 장짜리 기획서로 정리하고 적합한 컬러 테마를 지정해요.</p>
+        </div>
+      </div>
+      <div class="how-step-item">
+        <div class="how-step-num">2</div>
+        <div class="how-step-content">
+          <h4>예산 먼저 산정</h4>
+          <p>budget-agent가 예산 기준표를 바탕으로 모든 금액의 기준을 먼저 잡아요.</p>
+        </div>
+      </div>
+      <div class="how-step-item">
+        <div class="how-step-num">3</div>
+        <div class="how-step-content">
+          <h4>동시 원고 집필</h4>
+          <p>전문가들이 같은 브리프를 공유하며 각자의 파트 원고를 동시에 작성해요.</p>
+        </div>
+      </div>
+      <div class="how-step-item">
+        <div class="how-step-num">4</div>
+        <div class="how-step-content">
+          <h4>파일 5개 완성</h4>
+          <p>통일된 디자인 규칙에 맞춰 모든 파일을 생성해 대화창에 한 번에 첨부해요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 디자인 시스템 섹션 (#design) -->
+  <section id="design" class="design-section">
+    <div class="sec-title-wrap" data-reveal>
+      <div class="sec-tag">One design language.</div>
+      <h2 class="sec-heading">다섯 파일, 하나의 리퀴드 글래스.</h2>
+    </div>
+    <p class="design-sub" data-reveal>재질과 레이아웃은 늘 같고, 색만 주제에 맞게 바뀝니다.</p>
+    <div class="themes-grid" data-reveal>
+      <div class="theme-card">
+        <div class="theme-colors"><div class="theme-dot" style="background:#A8D8FF"></div><div class="theme-dot" style="background:#007AFF"></div></div>
+        <div class="theme-name">스카이</div>
+        <div class="theme-use">교육 및 일반 행사</div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-colors"><div class="theme-dot" style="background:#1EC8FF"></div><div class="theme-dot" style="background:#FF2E93"></div></div>
+        <div class="theme-name">팝</div>
+        <div class="theme-use">IT 캠페인 및 축제</div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-colors"><div class="theme-dot" style="background:#0B1628"></div><div class="theme-dot" style="background:#6EA8FF"></div></div>
+        <div class="theme-name">네이비</div>
+        <div class="theme-use">공공 보고서 및 정책</div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-colors"><div class="theme-dot" style="background:#A8E3C4"></div><div class="theme-dot" style="background:#12A150"></div></div>
+        <div class="theme-name">그린</div>
+        <div class="theme-use">환경 및 ESG 캠페인</div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-colors"><div class="theme-dot" style="background:#FFC2B3"></div><div class="theme-dot" style="background:#FF6B4A"></div></div>
+        <div class="theme-name">코럴</div>
+        <div class="theme-use">가족 및 복지 프로그램</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 마키 (추천 프롬프트) 섹션 -->
+  <section class="prompts-section">
+    <div class="sec-title-wrap" data-reveal>
+      <div class="sec-tag">Ready prompts.</div>
+      <h2 class="sec-heading">이런 요청에 강해요</h2>
+    </div>
+    <div class="marquee-wrap">
+      <div class="marquee-chip" onclick="sendPrompt('가을 학교 축제 기획해 줘')">가을 학교 축제 기획해 줘</div>
+      <div class="marquee-chip" onclick="sendPrompt('탄소중립 캠페인 홍보물 만들어 줘')">탄소중립 캠페인 홍보물 만들어 줘</div>
+      <div class="marquee-chip" onclick="sendPrompt('교사 AI 연수 프로그램 제안해 줘')">교사 AI 연수 프로그램 제안해 줘</div>
+      <div class="marquee-chip" onclick="sendPrompt('신제품 런칭 행사 기획해 줘')">신제품 런칭 행사 기획해 줘</div>
+      <div class="marquee-chip" onclick="sendPrompt('진로 체험 주간 프로그램 만들어 줘')">진로 체험 주간 프로그램 만들어 줘</div>
+      <div class="marquee-chip" onclick="sendPrompt('지역 축제 홍보 패키지 제안해 줘')">지역 축제 홍보 패키지 제안해 줘</div>
+    </div>
+    <div class="marquee-wrap reverse">
+      <div class="marquee-chip" onclick="sendPrompt('고객 제안 워크숍 기획해 줘')">고객 제안 워크숍 기획해 줘</div>
+      <div class="marquee-chip" onclick="sendPrompt('학부모 설명회 자료 만들어 줘')">학부모 설명회 자료 만들어 줘</div>
+      <div class="marquee-chip" onclick="sendPrompt('해커톤 대회 운영 계획 제안해 줘')">해커톤 대회 운영 계획 제안해 줘</div>
+      <div class="marquee-chip" onclick="sendPrompt('동아리 박람회 홍보 기획해 줘')">동아리 박람회 홍보 기획해 줘</div>
+      <div class="marquee-chip" onclick="sendPrompt('가을 학교 축제 기획해 줘')">가을 학교 축제 기획해 줘</div>
+      <div class="marquee-chip" onclick="sendPrompt('탄소중립 캠페인 홍보물 만들어 줘')">탄소중립 캠페인 홍보물 만들어 줘</div>
+    </div>
+  </section>
+
+  <!-- 8. 마지막 CTA 섹션 -->
+  <section class="cta-section mesh" data-reveal>
+    <div class="sec-tag">Your turn.</div>
+    <h2 class="cta-heading">지금, 아이디어 한 줄을<br>적어 보세요.</h2>
+    <button class="cta-btn" onclick="scrollToChat()">대화 시작하기 ↑</button>
+  </section>
+
+  <!-- 9. 푸터 -->
+  <footer>
+    <div>AI Creative Agent Team · Copilot Studio로 만든 멀티 에이전트</div>
+    <div>© 2026 All rights reserved.</div>
+  </footer>
+
+  <!-- 10. 떠 있는 알림 위젯 -->
+  <div class="floating-toast" id="floating-toast" onclick="scrollToChat()">
+    <div class="toast-dot" id="toast-dot"></div>
+    <span id="toast-text">팀이 작업 중 · 1:20</span>
+  </div>
+
+  <!-- Web Chat CDN -->
   <script src="https://cdn.botframework.com/botframework-webchat/4.18.0/webchat.js"></script>
   <script>
     const BROKER_URL = "https://dl-broker-juwon-4jt3z.azurewebsites.net/api/directlineToken";
     const SEALED = "Yry2zZQfoR0LtvKXU4EAWJDrRlFfIzFwmxMHK1XtCWh8HMTo6xB0_tieD3yqW3ICnpqyycszkAyK_lSVLkx5i38nIDMpHnJvWXkBfv6CtzRMPj5p7sop2cusuA7oyPWUVa6ayD8lpchD-_vd9WPF-VtNL58BXh0SGaiGWz3bTIW-Bg7YsmrQ4Zy0i-mTr7g1yFC-ohMz_c7ExSCdA9X0K34P49gQOG2e6oyX0oXDHcgVsMyEv3TSngxd5oW5bh9JgBZL_fHNw_m2k5qE3--FDKOc-xumyuolTv_MRfGkDKAxn42MlchGDGm4rw0AUtxkEqOeDm5bTBwRAF7NzpBMkYuAltD_FZLufioBwDYaOsa88uPzzA-y_Rtgo6xHqxXoET1HdDd5bTQ-kccAtWARi5wDqrpaTcqJCpC8JnQ6znoUqzNdTgjpwOO-cMAgCvzRxyGE7cHshGIjfca6CcAEU3Gpsl7U0PB9XPokKoGxaxie21Hu4ZOwOgGh6x2s9m32VL-lqXWAgs4uUVZBb1jg7Jzt0rKczlgTDcwU7SdqNMvOOloSQoX41V7DwlLOupNLbwzCcKjf6VDCslLzxyJhhQz2m78sDIbq4OTq_MQDBG1tDW7BW0Q1ZLwPpYtEMPB-g9i2lkkRnKA8s28uDvn2PQ";
-    const status = document.getElementById("status");
+    
+    let globalStore = null;
+    let startTime = null;
+    let timerInterval = null;
 
-    function showError(message) {
-      status.hidden = false;
-      status.textContent = message;
+    function scrollToChat() {
+      const chatCard = document.querySelector('.chat-card');
+      window.scrollTo({
+        top: chatCard.getBoundingClientRect().top + window.scrollY - 88,
+        behavior: "smooth"
+      });
+      document.getElementById('user-input').focus({ preventScroll: true });
     }
 
-    async function connect() {
-      if (!window.WebChat ||
-          typeof WebChat.createDirectLine !== "function" ||
-          typeof WebChat.renderWebChat !== "function") {
-        showError("채팅 구성 요소를 불러오지 못했습니다. 네트워크를 확인한 뒤 새로고침해 주세요.");
-        return;
-      }
+    function sendPrompt(text) {
+      scrollToChat();
+      const input = document.getElementById('user-input');
+      input.value = text;
+      input.focus();
+      submitMessage();
+    }
 
+    function handleKeydown(e) {
+      if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.keyCode !== 229) {
+        e.preventDefault();
+        submitMessage();
+      }
+    }
+
+    function submitMessage() {
+      const input = document.getElementById('user-input');
+      const text = input.value.trim();
+      if (!text || !globalStore) return;
+
+      document.body.classList.add('is-started');
+      document.body.classList.add('is-working');
+      
+      startTime = Date.now();
+      startTimer();
+
+      globalStore.dispatch({
+        type: "WEB_CHAT/SEND_MESSAGE",
+        payload: { text }
+      });
+
+      input.value = '';
+      input.style.height = 'auto';
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      const timerElem = document.getElementById('working-timer');
+      const toastText = document.getElementById('toast-text');
+      
+      timerInterval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const mins = Math.floor(elapsed / 60);
+        const secs = elapsed % 60;
+        const timeStr = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        
+        if (timerElem) timerElem.textContent = `팀이 작업 중 · ${timeStr}`;
+        if (toastText) toastText.textContent = `팀이 작업 중 · ${timeStr}`;
+        
+        if (elapsed > 20 && timerElem) {
+          timerElem.textContent = `파일 5개를 만드느라 몇 분 걸릴 수 있어요 · ${timeStr}`;
+        }
+      }, 1000);
+    }
+
+    function stopWorkingState(isDone = true) {
+      document.body.classList.remove('is-working');
+      if (timerInterval) clearInterval(timerInterval);
+      const toastText = document.getElementById('toast-text');
+      if (toastText && isDone) {
+        toastText.textContent = '결과가 도착했어요 ↑';
+        document.getElementById('toast-dot').style.background = '#10B981';
+      }
+    }
+
+    // 스크롤 등장 효과 (IntersectionObserver)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+
+    // 숫자 띠 카운트 업 애니메이션
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('.stat-num').forEach(num => {
+            const target = +num.getAttribute('data-target');
+            let current = 0;
+            const inc = target / 30;
+            const timer = setInterval(() => {
+              current += inc;
+              if (current >= target) {
+                num.textContent = target;
+                clearInterval(timer);
+              } else {
+                num.textContent = Math.floor(current);
+              }
+            }, 40);
+          });
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const statsSec = document.querySelector('.stats-section');
+    if (statsSec) statsObserver.observe(statsSec);
+
+    // 떠 있는 알림 표시 여부 감지
+    window.addEventListener('scroll', () => {
+      const chatCard = document.querySelector('.chat-card');
+      const rect = chatCard.getBoundingClientRect();
+      const toast = document.getElementById('floating-toast');
+      if (rect.bottom < 0 || rect.top > window.innerHeight) {
+        if (document.body.classList.contains('is-working') || document.body.classList.contains('is-started')) {
+          toast.classList.add('is-visible');
+        }
+      } else {
+        toast.classList.remove('is-visible');
+      }
+    });
+
+    // Web Chat 연결 메인 로직
+    async function connect() {
+      const connText = document.getElementById('conn-text');
+      
       let response;
       try {
-        // Keep this a simple CORS request; the broker may not support preflight.
         response = await fetch(BROKER_URL, {
           method: "POST",
           body: JSON.stringify({ sealed: SEALED })
         });
       } catch {
-        showError("서버에 연결하지 못했습니다. 네트워크와 배포 주소를 확인해 주세요.");
+        connText.textContent = "서버 연결 실패";
         return;
       }
       if (!response.ok) {
-        showError("서버가 연결 요청을 처리하지 못했습니다 (HTTP " + response.status + ").");
+        connText.textContent = `연결 오류 (HTTP ${response.status})`;
         return;
       }
 
@@ -47,25 +1253,64 @@
       try {
         data = await response.json();
       } catch {
-        showError("서버 응답을 읽을 수 없습니다. 잠시 후 다시 시도해 주세요.");
+        connText.textContent = "응답 읽기 실패";
         return;
       }
       if (!data || typeof data.token !== "string" || !data.token.trim()) {
-        showError("서버에서 연결 토큰을 받지 못했습니다. 암호와 배포 주소를 확인해 주세요.");
+        connText.textContent = "토큰 수신 실패";
         return;
       }
 
       try {
         const directLine = WebChat.createDirectLine({ token: data.token });
-        status.hidden = true;
+        
+        // 미들웨어 설정 및 상태 관리 스토어
+        globalStore = WebChat.createStore({}, ({ dispatch }) => next => action => {
+          if (action.type === 'DIRECT_LINE/CONNECT_FULFILLED') {
+            document.body.classList.add('is-connected');
+            connText.textContent = "팀과 연결됨";
+            document.getElementById('send-btn').disabled = false;
+          }
+          if (action.type === 'DIRECT_LINE/INCOMING_ACTIVITY') {
+            const activity = action.payload.activity;
+            if (activity && activity.from && activity.from.role !== 'user') {
+              if (activity.type === 'message') {
+                stopWorkingState(true);
+              }
+            }
+          }
+          return next(action);
+        });
+
+        document.getElementById('conn-dot').style.background = '#10B981';
+        
         directLine.postActivity({
           type: "event", name: "startConversation", from: { id: "user" }
         }).subscribe({
-          error: () => showError("첫 인사를 요청하지 못했습니다. 채팅창에 메시지를 입력해 주세요.")
+          error: () => { connText.textContent = "첫 인사 요청 실패"; }
         });
-        WebChat.renderWebChat({ directLine, locale: "ko-KR" }, document.getElementById("webchat"));
+
+        WebChat.renderWebChat({
+          directLine,
+          store: globalStore,
+          locale: "ko-KR",
+          styleOptions: {
+            hideSendBox: true,
+            rootHeight: "100%",
+            backgroundColor: "transparent",
+            primaryFont: "'Pretendard Variable', -apple-system, sans-serif",
+            bubbleBackground: "transparent",
+            bubbleBorderWidth: 0,
+            bubbleMaxWidth: 720,
+            bubbleMinWidth: 0,
+            bubbleFromUserBackground: "linear-gradient(135deg, #EEF0FF, #FBEFFF)",
+            bubbleFromUserBorderWidth: 0,
+            bubbleFromUserBorderRadius: 20
+          }
+        }, document.getElementById("webchat"));
+
       } catch {
-        showError("채팅을 시작하지 못했습니다. 새로고침 후 다시 시도해 주세요.");
+        connText.textContent = "채팅 시작 실패";
       }
     }
 
